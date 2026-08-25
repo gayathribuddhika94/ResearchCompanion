@@ -1,0 +1,62 @@
+@page
+@model ResearchCompanion.Pages.Library.IndexModel
+
+<h3>Literature library</h3>
+
+<form method="get" class="d-flex mb-4" style="max-width:500px;">
+    <input name="q" value="@Model.Query" class="form-control me-2" placeholder="Search Semantic Scholar, CrossRef, arXiv..." />
+    <button class="btn btn-primary">Search</button>
+</form>
+
+@if (Model.Results.Any())
+{
+    <h5>Search results</h5>
+    <table class="table">
+        <thead><tr><th>Title</th><th>Authors</th><th>Year</th><th>Source</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var p in Model.Results)
+        {
+            <tr>
+                <td>@p.Title</td>
+                <td>@p.Authors</td>
+                <td>@p.Year</td>
+                <td><span class="badge bg-light text-dark border">@p.SourceDatabase</span></td>
+                <td>
+                    <form method="post" asp-page-handler="Save">
+                        <input type="hidden" name="paperId" value="@p.PaperId" />
+                        <input type="hidden" name="q" value="@Model.Query" />
+                        <button class="btn btn-sm btn-outline-secondary">Save</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else if (!string.IsNullOrWhiteSpace(Model.Query))
+{
+    <p class="text-secondary">No results found for "@Model.Query".</p>
+}
+
+<h5 class="mt-4">My saved papers</h5>
+@if (!Model.SavedItems.Any())
+{
+    <p class="text-secondary">Nothing saved yet — search above and click Save.</p>
+}
+else
+{
+    <table class="table">
+        <thead><tr><th>Title</th><th>Authors</th><th>Year</th><th>Source</th></tr></thead>
+        <tbody>
+        @foreach (var item in Model.SavedItems)
+        {
+            <tr>
+                <td>@item.Paper?.Title</td>
+                <td>@item.Paper?.Authors</td>
+                <td>@item.Paper?.Year</td>
+                <td><span class="badge bg-light text-dark border">@item.Paper?.SourceDatabase</span></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

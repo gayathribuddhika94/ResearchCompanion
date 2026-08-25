@@ -1,0 +1,12 @@
+.card {
+    border-radius: 12px;
+}
+
+.nav-link {
+    color: #333;
+}
+
+.nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+}

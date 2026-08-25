@@ -1,0 +1,48 @@
+@page
+@model ResearchCompanion.Pages.IndexModel
+
+<h3 class="mb-3">Welcome back@(Model.FullName != null ? ", " + Model.FullName : "")</h3>
+
+@if (!Model.IsAuthenticated)
+{
+    <p>Please <a href="/Account/Login">log in</a> or <a href="/Account/Register">register</a> to get started.</p>
+}
+else
+{
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card p-3"><div class="text-secondary small">Research profiles</div><div class="fs-3">@Model.ProfileCount</div></div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3"><div class="text-secondary small">Papers saved</div><div class="fs-3">@Model.LibraryCount</div></div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3"><div class="text-secondary small">Documents generated</div><div class="fs-3">@Model.DocumentCount</div></div>
+        </div>
+    </div>
+
+    <a class="btn btn-primary mb-4" href="/Intake/Index">Start a new research profile</a>
+
+    <h5>Your research profiles</h5>
+    @if (Model.Profiles.Count == 0)
+    {
+        <p class="text-secondary">No research profiles yet — start one above.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead><tr><th>Interest area</th><th>Status</th><th>Created</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var p in Model.Profiles)
+            {
+                <tr>
+                    <td>@p.InterestArea</td>
+                    <td>@p.Status</td>
+                    <td>@p.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td><a href="/Topics/Suggestions?profileId=@p.ProfileId">View topics</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}

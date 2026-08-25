@@ -1,0 +1,72 @@
+@page
+@model ResearchCompanion.Pages.Intake.IndexModel
+
+<h3>Tell us about your research</h3>
+<p class="text-secondary">Answer these questions instead of typing a prompt — your answers are what let the system suggest evidence-backed topics (System Outline, Module 1).</p>
+
+<form method="post" class="col-md-8">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">What's the purpose of this research?</label>
+        <select asp-for="Input.Purpose" class="form-select">
+            <option>Degree requirement</option>
+            <option>Professional or organisational need</option>
+            <option>Personal interest or publication</option>
+            <option>Competition or grant application</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">What's your broad area or field of interest?</label>
+        <input asp-for="Input.InterestArea" class="form-control" placeholder="e.g. AI-assisted academic research tools" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">What kind of novelty are you hoping for?</label>
+        <select asp-for="Input.NoveltyType" class="form-select">
+            <option>New method</option>
+            <option>New dataset or context</option>
+            <option>Comparative or evaluation study</option>
+            <option>Application to an underexplored domain</option>
+            <option>Replication with extension</option>
+            <option>Not sure yet</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">What's your current level of subject knowledge?</label>
+        <select asp-for="Input.ExperienceLevel" class="form-select">
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Constraints (time, data access, skills, budget) — optional</label>
+        <textarea asp-for="Input.Constraints" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Target timeframe — optional</label>
+        <input asp-for="Input.TargetTimeframe" class="form-control" placeholder="e.g. 6 months" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">What do you want the system to produce?</label>
+        <select asp-for="Input.DesiredOutput" class="form-select">
+            <option>Just a topic</option>
+            <option>A full proposal</option>
+            <option>The complete lifecycle through to thesis or paper</option>
+            <option>A specific document only</option>
+        </select>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Input.HasMentor" class="form-check-input" />
+        <label class="form-check-label">I have a supervisor, mentor, or advisor</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Find my topics</button>
+</form>

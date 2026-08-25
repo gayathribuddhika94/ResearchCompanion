@@ -1,0 +1,18 @@
+@page
+@model ResearchCompanion.Pages.Account.LoginModel
+
+<h3>Log in</h3>
+<div class="col-md-6">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Input.Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input asp-for="Input.Password" type="password" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Log in</button>
+    </form>
+</div>

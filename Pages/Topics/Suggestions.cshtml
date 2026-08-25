@@ -1,0 +1,32 @@
+@page
+@model ResearchCompanion.Pages.Topics.SuggestionsModel
+
+<h3>Suggested topics</h3>
+<p class="text-secondary">Based on your profile: @Model.Profile?.InterestArea (@Model.Profile?.NoveltyType)</p>
+
+@foreach (var topic in Model.Topics)
+{
+    <div class="card mb-3 p-3">
+        <h5>@topic.Title</h5>
+        <p>@topic.NoveltyRationale</p>
+        <p class="text-secondary">@topic.FeasibilityNote</p>
+        <div class="mb-2">
+            <span class="badge bg-primary me-1">Novelty: @topic.NoveltyScore</span>
+            <span class="badge bg-secondary">Feasibility: @topic.FeasibilityScore</span>
+            @if (topic.IsSelected)
+            {
+                <span class="badge bg-success ms-1">Selected</span>
+            }
+        </div>
+        <form method="post">
+            <input type="hidden" name="topicId" value="@topic.TopicId" />
+            <input type="hidden" name="profileId" value="@Model.ProfileId" />
+            <button type="submit" class="btn btn-outline-primary btn-sm">Select this topic</button>
+        </form>
+    </div>
+}
+
+@if (!Model.Topics.Any())
+{
+    <p>No candidate topics were generated. Try a broader interest area, or check connectivity to the academic APIs.</p>
+}

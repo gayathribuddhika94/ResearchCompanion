@@ -1,0 +1,11 @@
+@page
+@model ResearchCompanion.Pages.Documents.GenerateProposalModel
+
+<h3>Generate proposal document</h3>
+<p>Topic: <strong>@Model.SelectedTopicTitle</strong></p>
+<p>@Model.LibraryCount paper(s) in your library will be used to draft the literature review section.</p>
+
+<form method="post">
+    <input type="hidden" name="profileId" value="@Model.ProfileId" />
+    <button type="submit" class="btn btn-primary">Generate proposal (.docx)</button>
+</form>
