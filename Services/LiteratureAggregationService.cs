@@ -22,7 +22,16 @@ public class LiteratureAggregationService
     {
         var tasks = _providers.Select(p => p.SearchAsync(query, ct));
         var results = (await Task.WhenAll(tasks)).SelectMany(r => r).ToList();
-        var deduped = Deduplicate(results);
+        return await PersistAsync(results, ct);
+    }
+
+    // Shared find-or-create/de-duplication path, factored out so any source
+    // of candidate papers, a live multi-database search (above) or an import
+    // from an external reference manager such as Mendeley, ends up with the
+    // same de-duplication guarantees and real PaperId values.
+    public async Task<List<Paper>> PersistAsync(List<Paper> papers, CancellationToken ct = default)
+    {
+        var deduped = Deduplicate(papers);
 
         var persisted = new List<Paper>();
         foreach (var paper in deduped)

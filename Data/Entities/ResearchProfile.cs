@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ResearchCompanion.Data.Entities;
 
 // Persists the answers collected by the guided intake (Module 1) — the
@@ -5,6 +7,7 @@ namespace ResearchCompanion.Data.Entities;
 // (topic discovery, document generation) reads from this profile.
 public class ResearchProfile
 {
+    [Key]
     public int ProfileId { get; set; }
     public string UserId { get; set; } = default!;
     public ApplicationUser? User { get; set; }

@@ -3,10 +3,13 @@
 
 <h3>Literature library</h3>
 
-<form method="get" class="d-flex mb-4" style="max-width:500px;">
-    <input name="q" value="@Model.Query" class="form-control me-2" placeholder="Search Semantic Scholar, CrossRef, arXiv..." />
-    <button class="btn btn-primary">Search</button>
-</form>
+<div class="d-flex justify-content-between align-items-center mb-3" style="max-width:700px;">
+    <form method="get" class="d-flex flex-grow-1 me-3">
+        <input name="q" value="@Model.Query" class="form-control me-2" placeholder="Search Semantic Scholar, CrossRef, arXiv..." />
+        <button class="btn btn-primary">Search</button>
+    </form>
+    <a class="btn btn-outline-secondary text-nowrap" href="/Mendeley/Import">Import from Mendeley</a>
+</div>
 
 @if (Model.Results.Any())
 {
@@ -39,14 +42,24 @@ else if (!string.IsNullOrWhiteSpace(Model.Query))
 }
 
 <h5 class="mt-4">My saved papers</h5>
+<p class="text-secondary small">
+    Untick "Include in literature review" for a saved paper you want to keep for reference
+    but not cite — only ticked papers are pulled into a generated document's literature
+    review and IEEE reference list.
+</p>
 @if (!Model.SavedItems.Any())
 {
-    <p class="text-secondary">Nothing saved yet — search above and click Save.</p>
+    <p class="text-secondary">Nothing saved yet — search above and click Save, or import from Mendeley.</p>
 }
 else
 {
-    <table class="table">
-        <thead><tr><th>Title</th><th>Authors</th><th>Year</th><th>Source</th></tr></thead>
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Title</th><th>Authors</th><th>Year</th><th>Source</th>
+                <th>Personal notes</th><th>In review?</th>
+            </tr>
+        </thead>
         <tbody>
         @foreach (var item in Model.SavedItems)
         {
@@ -55,6 +68,22 @@ else
                 <td>@item.Paper?.Authors</td>
                 <td>@item.Paper?.Year</td>
                 <td><span class="badge bg-light text-dark border">@item.Paper?.SourceDatabase</span></td>
+                <td style="min-width:220px;">
+                    <form method="post" asp-page-handler="Update" class="d-flex flex-column gap-1">
+                        <input type="hidden" name="libraryId" value="@item.LibraryId" />
+                        <input type="hidden" name="q" value="@Model.Query" />
+                        <textarea name="notes" class="form-control form-control-sm" rows="2"
+                                  placeholder="Your notes on this paper...">@item.Notes</textarea>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="review_@item.LibraryId"
+                                   name="includeInLiteratureReview" value="true"
+                                   checked="@item.IncludeInLiteratureReview" />
+                            <label class="form-check-label small" for="review_@item.LibraryId">Include in literature review</label>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary align-self-start">Save</button>
+                    </form>
+                </td>
+                <td>@(item.IncludeInLiteratureReview ? "Yes" : "No")</td>
             </tr>
         }
         </tbody>

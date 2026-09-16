@@ -2,3 +2,7 @@ bin/
 obj/
 *.user
 .vs/
+
+# Generated proposal/.docx files saved per-user by Documents/GenerateProposal —
+# these are user data produced at runtime, not source.
+GeneratedDocuments/

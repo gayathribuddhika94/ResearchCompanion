@@ -55,4 +55,20 @@ public class IndexModel : PageModel
         }
         return RedirectToPage(new { q });
     }
+
+    // Updates a saved paper's personal notes and whether it should be pulled
+    // into the generated literature review / References list. One handler
+    // covers both fields since they're edited from the same row's form.
+    public async Task<IActionResult> OnPostUpdateAsync(int libraryId, string? notes, bool includeInLiteratureReview, string? q)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var item = await _db.UserLibrary.FirstOrDefaultAsync(l => l.LibraryId == libraryId && l.UserId == userId);
+        if (item != null)
+        {
+            item.Notes = notes;
+            item.IncludeInLiteratureReview = includeInLiteratureReview;
+            await _db.SaveChangesAsync();
+        }
+        return RedirectToPage(new { q });
+    }
 }

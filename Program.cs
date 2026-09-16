@@ -3,10 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using ResearchCompanion.Data;
 using ResearchCompanion.Data.Entities;
 using ResearchCompanion.Services;
+using ResearchCompanion.Services.Mendeley;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
+
+// Session is used only to hold the short-lived OAuth "state" value while a
+// researcher is connecting their Mendeley account (Pages/Mendeley), guarding
+// against cross-site request forgery on the redirect back from Mendeley.
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
@@ -45,6 +56,12 @@ builder.Services.AddScoped<IExternalSearchProvider>(sp => sp.GetRequiredService<
 builder.Services.AddScoped<LiteratureAggregationService>();
 builder.Services.AddScoped<TopicDiscoveryService>();
 builder.Services.AddScoped<DocumentRenderer>();
+builder.Services.AddScoped<CitationFormatterService>();
+
+// Mendeley reference-manager integration (Modules 3/9 extension — see
+// README.md "Connecting Mendeley" for how to obtain ClientId/ClientSecret).
+builder.Services.Configure<MendeleyOptions>(builder.Configuration.GetSection(MendeleyOptions.SectionName));
+builder.Services.AddHttpClient<MendeleyClient>();
 
 var app = builder.Build();
 
@@ -58,6 +75,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
