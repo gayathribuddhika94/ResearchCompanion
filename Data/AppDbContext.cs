@@ -15,6 +15,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<UserLibraryItem> UserLibrary => Set<UserLibraryItem>();
     public DbSet<ResearchDocument> Documents => Set<ResearchDocument>();
     public DbSet<DocumentSection> DocumentSections => Set<DocumentSection>();
+    public DbSet<MendeleyAccount> MendeleyAccounts => Set<MendeleyAccount>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -45,5 +46,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         builder.Entity<Paper>()
             .HasIndex(p => p.Doi);
+
+        // One Mendeley connection per researcher — connecting again updates
+        // the same row rather than creating a duplicate.
+        builder.Entity<MendeleyAccount>()
+            .HasIndex(m => m.UserId)
+            .IsUnique();
     }
 }

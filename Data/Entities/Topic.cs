@@ -1,7 +1,11 @@
+
+using System.ComponentModel.DataAnnotations;
+
 namespace ResearchCompanion.Data.Entities;
 
 public class Topic
 {
+    [Key]
     public int TopicId { get; set; }
     public int ProfileId { get; set; }
     public ResearchProfile? Profile { get; set; }
